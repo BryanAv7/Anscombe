@@ -1,0 +1,98 @@
+---
+title: "DatasauRus"
+author: "Bryan Avila"
+date: "2025-10-16"
+output: html_document
+---
+
+# Práctica: The Datasaurus data package
+
+
+### Análisis de datos
+
+En esta sección se realizará un analisis exploratorio del Dataset llamado `DatasauRus`.
+
+
+### Librerias por utilizar
+
+Estas librerías facilitan el acceso a los datos y su posterior manipulación y transformación.
+
+```{r librerias}
+suppressPackageStartupMessages(library(dplyr))
+library(datasauRus)
+```
+
+
+
+# Parte A: Visualización de los datos
+
+En la siguiente tabla se pueden visualizar los datos correspondientes al análisis.
+
+```{r visualizacion}
+datasaurus_dozen %>%
+  group_by(dataset) %>%
+  summarise(
+    mean_x    = mean(x),
+    mean_y    = mean(y),
+    std_dev_x = sd(x),
+    std_dev_y = sd(y),
+    corr_x_y  = cor(x, y)
+  )
+```
+
+### Carga de la Libreria grafica
+
+Se utiliza para crear gráficos y visualizaciones de datos.
+
+```{r libreriaG}
+library(ggplot2)
+```
+
+
+
+### Visualización de los graficos
+
+A continuación se podrán visualizar los gráficos de cada conjunto de datos.
+
+```{r visualizacionG}
+ggplot(datasaurus_dozen, aes(x = x, y = y, color = dataset)) +
+  geom_point() +
+  theme_void() +
+  theme(legend.position = "none") +
+  facet_wrap(~dataset, ncol = 3)
+```
+
+
+# Parte B: Regresión Lineal(Bullseye)
+
+La regresión lineal nos muestra la relación entre X y Y, indicando la tendencia general de los datos.
+
+
+### Visualización de los resultados
+
+Se visualizara los resultados obtenidos a partir de los datos.
+
+```{r regresion_bullseye}
+# Filtrar solo el dataset "bullseye"
+bullseye_data <- datasaurus_dozen %>% 
+  filter(dataset == "bullseye")
+
+# Graficar puntos + línea de regresión lineal
+ggplot(bullseye_data, aes(x = x, y = y)) +
+  geom_point(color = "steelblue", size = 2, alpha = 0.7) +   # puntos
+  geom_smooth(method = "lm", color = "red", se = TRUE) +     # línea de regresión
+  labs(
+    title = "Regresión Lineal: 'Bullseye'",
+    subtitle = "Línea roja: Tendencia lineal",
+    x = "Variable X",
+    y = "Variable Y"
+  ) +
+  theme_minimal()
+```
+
+### Concluciones
+
+Como podemos observar que la línea de regresión lineal presenta una pendiente ligeramente negativa, lo que sugiere una débil tendencia decreciente entre "X" y "Y".
+
+Sin embargo, la distribución de los datos es dispersa y no sigue un patrón estrictamente lineal, por lo que la regresión lineal no logra demostrar como se comportan los datos.
+
